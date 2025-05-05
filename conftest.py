@@ -1,10 +1,7 @@
 import pytest
-from data import URL_MAIN_PAGE
+from urls import URL_MAIN_PAGE
 from pages.main_page import MainPage
 from pages.order_page import OrderPage
-from locators.base_page_locators import BasePageLocators
-from selenium.webdriver.support.wait import WebDriverWait as WDW
-from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver import Firefox
 from selenium.webdriver import FirefoxOptions
 
@@ -15,8 +12,6 @@ from selenium.webdriver import FirefoxOptions
 @pytest.fixture(scope='function')
 def driver():
     options = FirefoxOptions()
-    # options.add_argument('--headless')
-    # options.add_argument('--disable-gpu')
     driver = Firefox(options=options)
     yield driver
     driver.quit()
@@ -28,9 +23,7 @@ def driver():
 def main_page(driver):
     page = MainPage(driver)
     page.open_page(URL_MAIN_PAGE)
-    WDW(driver, 5).until(
-        EC.element_to_be_clickable(BasePageLocators.BUTTON_ORDER_IN_HEADER_LOCATOR)
-    )
+    page.wait_for_order_button()
     return page
 
 
@@ -40,9 +33,7 @@ def main_page(driver):
 def order_page(driver):
     page = OrderPage(driver)
     page.open_page(URL_MAIN_PAGE)
-    WDW(driver, 5).until(
-        EC.element_to_be_clickable(BasePageLocators.BUTTON_ORDER_IN_HEADER_LOCATOR)
-    )
+    page.wait_for_order_button()
     return page
 
 

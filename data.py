@@ -4,15 +4,6 @@ from datetime import datetime, timedelta
 
 
 
-# Главная страница "Яндекс.Самокат"
-URL_MAIN_PAGE = "https://qa-scooter.praktikum-services.ru/"
-
-# Страница "Заказать"
-URL_ORDER_PAGE = URL_MAIN_PAGE + "order"
-
-# Страница "Дзен"
-URL_DZEN = "https://dzen.ru/?yredirect=true"
-
 # Текст ответов на вопросы в блоке "Вопросы о важном"
 # ОТВЕТ на вопрос - "Сколько это стоит? И как оплатить?"
 TEXT_ANSWER_1 = "Сутки — 400 рублей. Оплата курьеру — наличными или картой."

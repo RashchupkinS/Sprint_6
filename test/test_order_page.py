@@ -1,7 +1,8 @@
 import allure
 from locators.base_page_locators import BasePageLocators
 from locators.order_page_locators import OrderPageLocators
-from data import USER_1, USER_2, URL_DZEN, ORDER_HAS_BEEN_PLACED, URL_MAIN_PAGE
+from data import USER_1, USER_2, ORDER_HAS_BEEN_PLACED
+from urls import URL_DZEN, URL_MAIN_PAGE
 
 
 
@@ -16,7 +17,6 @@ class TestOrderPage:
         order_page.click_to_element(OrderPageLocators.BUTTON_YES_LOCATOR)
         confirmation_text = order_page.get_text(OrderPageLocators.WINDOW_WITH_CONFIRMATION_LOCATOR)
         assert ORDER_HAS_BEEN_PLACED in confirmation_text
-
 
 
     @allure.title('Заказ скутера кнопкой "Заказать" в блоке "Как это работает"')
@@ -37,7 +37,7 @@ class TestOrderPage:
         order_page.click_to_element(OrderPageLocators.BUTTON_YES_LOCATOR)
         order_page.click_to_element(OrderPageLocators.BUTTON_VIEW_THE_STATUS_LOCATOR)
         order_page.click_to_element(BasePageLocators.LOGO_SCOOTER_LOCATOR)
-        assert driver.current_url == URL_MAIN_PAGE
+        assert order_page.get_current_url() == URL_MAIN_PAGE
 
 
     @allure.title('Редирект в новом окне на главную страницу "Дзен", при нажатии на логотип "Яндекс" после оформления заказа')
@@ -49,7 +49,7 @@ class TestOrderPage:
         order_page.click_to_element(OrderPageLocators.BUTTON_VIEW_THE_STATUS_LOCATOR)
         order_page.click_to_element(BasePageLocators.LOGO_YANDEX_LOCATOR)
         order_page.click_to_logo_yandex_and_change_to_dzen()
-        assert driver.current_url == URL_DZEN
+        assert order_page.get_current_url() == URL_DZEN
 
 
 

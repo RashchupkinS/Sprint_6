@@ -3,7 +3,7 @@ from locators.base_page_locators import BasePageLocators
 from locators.order_page_locators import OrderPageLocators
 from selenium.webdriver.support.wait import WebDriverWait as WDW
 from selenium.webdriver.support import expected_conditions as EC
-from data import URL_DZEN
+from urls import URL_DZEN
 
 
 
@@ -26,7 +26,7 @@ class BasePage:
     def accept_cookie(self):
         # ожидание кнопки "да все привыкли"
         try:
-            close_cookie = WDW(self.driver, 10).until(
+            close_cookie = self.wait.until(
                 EC.element_to_be_clickable(BasePageLocators.BUTTON_ACCEPT_COOKIE_LOCATOR)
             )
             close_cookie.click()
@@ -39,9 +39,7 @@ class BasePage:
     def scroll_to_element(self, locator):
         element = self.driver.find_element(*locator)
         self.driver.execute_script("arguments[0].scrollIntoView();", element)
-        self.wait.until(
-                EC.element_to_be_clickable(element)
-            )
+        self.wait.until(EC.element_to_be_clickable(element))
         return element
 
     # клик по элементу
@@ -53,7 +51,7 @@ class BasePage:
     # метод выполняет клик по элементу
     @allure.step('Ожидание видимости элемента')
     def wait_for_element(self, locator):
-        return WDW(self.driver, 10).until(
+        return self.wait.until(
             EC.presence_of_element_located(locator))
 
     # метод получает текст элемента
@@ -68,14 +66,24 @@ class BasePage:
         element = self.wait_for_element(locator)
         element.send_keys(text)
 
+    # метод получает текущий url
+    @allure.step('Получить текущий url')
+    def get_current_url(self):
+        return self.driver.current_url
+
+    # метод проверяет, что страница загрузилась по "кликабельности" кнопки "Заказать" в хедере
+    @allure.step('Дождаться кликабельности кнопки заказать в хедере')
+    def wait_for_order_button(self):
+        self.wait.until(
+            EC.element_to_be_clickable(BasePageLocators.BUTTON_ORDER_IN_HEADER_LOCATOR)
+        )
+
     # при клике на логотип Яндекс, открывается новая вкладка и в ней открывается страница Дзен
     @allure.step('Проверить переход при клике на логотип Яндекс в хедере')
     @allure.description('При клике на логотип Яндекс, открывается новая вкладка и в ней открывается страница Дзен')
     def click_to_logo_yandex_and_change_to_dzen(self):
         self.driver.switch_to.window(self.driver.window_handles[-1])
-        return self.wait.until(
-            EC.url_contains(URL_DZEN)
-        )
+        return self.wait.until(EC.url_contains(URL_DZEN))
 
 
     # принятие куки, клик по кнопке "Заказать" в хедере
